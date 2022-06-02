@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- Favicons -->
+  <link rel="icon" href="https://clydeblog.oss-cn-shanghai.aliyuncs.com/static/favicon.ico">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <!-- 静态文件 -->
+
+  <!-- Google Fonts -->
+  <!-- <link
+    href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,500i,600,600i,700,700i|Playfair+Display:400,400i,500,500i,600,600i,700,700i,900,900i"
+    rel="stylesheet"> -->
+
+  <!-- Vendor CSS Files -->
+  <!-- <link href="./assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="./assets/vendor/hover/hover.min.css" rel="stylesheet">
+  <link href="./assets/vendor/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="./assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="./assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="./assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet"> -->
+
+  <!-- Template Main CSS File -->
+  <link href="<%= BASE_URL %>assets/css/style.css" rel="stylesheet">
+
+  <!-- Template clyde CSS File -->
+  <link href="<%= BASE_URL %>assets/css/clydeblog.css" rel="stylesheet">
+
+  <!-- Highlight CSS File -->
+  <link href="<%= BASE_URL %>assets/css/xcode.min.css" rel="stylesheet">
+
+  <!-- 这里为引入的css包 -->
+  <% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+  <link rel="stylesheet" href="<%=css%>" as="style">
+  <% } %>
+  <!---->
+
+<!-- 百度统计 -->
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6960cb94e612cd28d44cfc9d6bcfb84c";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+      Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+
+  <!-- 这里为引入的js包 -->
+  <% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+  <script src="<%=js%>"></script>
+  <% } %>
+  <script src="<%= BASE_URL %>assets/js/main.js"></script>
+  <script src="<%= BASE_URL %>assets/vendor/typed/typed.js"></script>
+  <!-- <script type="text/javascript" src="./ckeditor/ckeditor-init.js"></script>
+  <script type="text/javascript" src="./ckeditor/ckeditor/ckeditor.js"></script> -->
+
+</body>
+
+</html>
