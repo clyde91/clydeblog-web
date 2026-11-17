@@ -167,7 +167,4 @@ function onSubmit() {
       console.log(error);
     });
 }
-function onTest() {
-  console.log(data.form.features);
-}
 </script>

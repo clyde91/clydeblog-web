@@ -355,8 +355,6 @@ p img{
 }
 
 
-
-
 /*右边对齐*/
 .span-right {
     position: relative;
@@ -371,3 +369,9 @@ p img{
     padding: 20px!important;
     margin: 0!important;
   }
+
+/*ckeditor*/
+.ck-content{
+    min-height: 600px;
+    width: 900px;
+}

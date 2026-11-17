@@ -10,6 +10,17 @@
       position: relative;
       float: right;
       margin-top: -40px;
+      margin-right: 140px;
+    "
+    type="primary"
+    @click="data.addVisible = !data.addVisible"
+    ><el-icon><Plus /></el-icon>&nbsp;&nbsp;&nbsp;添加</el-button
+  >
+  <el-button
+    style="
+      position: relative;
+      float: right;
+      margin-top: -40px;
       margin-right: 40px;
     "
     type="primary"
@@ -18,17 +29,17 @@
   >
   <!-- 跑马灯 -->
   <el-card style="border-radius: 18px;height=680px">
-    <el-skeleton style="width: 100%" :loading="data.listLoading" animated >
+    <el-skeleton style="width: 100%" :loading="data.listLoading" animated>
       <template #template>
         <el-skeleton-item variant="image" style="width: 100%; height: 500px" />
-            <br>
-         <el-skeleton-item variant="text" style="width: 30%;height: 25px" />
-         <el-skeleton-item variant="text" style="width: 100%" />
-         <el-skeleton-item variant="text" style="width: 100%" />
-         <el-skeleton-item variant="text" style="width: 100%" />
-         <el-skeleton-item variant="text" style="width: 100%" />
-         <el-skeleton-item variant="text" style="width: 100%" />
-         <el-skeleton-item variant="text" style="width: 40%" />
+        <br />
+        <el-skeleton-item variant="text" style="width: 30%; height: 25px" />
+        <el-skeleton-item variant="text" style="width: 100%" />
+        <el-skeleton-item variant="text" style="width: 100%" />
+        <el-skeleton-item variant="text" style="width: 100%" />
+        <el-skeleton-item variant="text" style="width: 100%" />
+        <el-skeleton-item variant="text" style="width: 100%" />
+        <el-skeleton-item variant="text" style="width: 40%" />
       </template>
     </el-skeleton>
     <el-carousel
@@ -50,10 +61,10 @@
             margin-top: 30px;
           "
         >
-          <el-avatar shape="circle" :size="100" :src="item.architect.avatar" />
+          <el-avatar shape="circle" :size="100" :src="item.architect==undefined?'':item.architect.avatar" />
           <div style="text-align: center">
             <span style="display: inline-block; width: 100px; color: #5f5e73">{{
-              item.architect.name
+              item.architect==undefined?'佚名':item.architect.name
             }}</span>
           </div>
         </div>
@@ -67,7 +78,11 @@
           </div>
           <br />
           <span v-for="feature in item.features" :key="feature.id">
-            <el-tag class="ml-2" :type="data.colors[Math.floor(5 * Math.random())]">{{ feature.name }}</el-tag>
+            <el-tag
+              class="ml-2"
+              :type="data.colors[Math.floor(5 * Math.random())]"
+              >{{ feature.name }}</el-tag
+            >
           </span>
           <!-- <div><el-rate v-model="" size="large" /></div> -->
         </div>
@@ -132,15 +147,77 @@
       </el-form-item>
     </el-form>
   </el-dialog>
+
+  <!-- 添加窗口 -->
+  <el-dialog v-model="data.addVisible" :width="data.width">
+    <el-button
+      type="primary"
+      style="float: right; margin-right: 15px"
+      @click="add"
+      >添加</el-button
+    ><br /><br />
+    <el-form :inline="true" :model="listQuery" label-width="140px">
+      <el-form-item label="建筑名称:">
+        <el-input
+          v-model="data.form.name"
+          placeholder="请输入建筑名称"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="国家:">
+        <el-input
+          v-model="data.form.country"
+          placeholder="请输入建筑所在国家"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="建筑师:">
+        <el-select
+          v-model="data.form.architect.id"
+          filterable
+          remote
+          placeholder="请输入名字"
+          :remote-method="getArchitect"
+        >
+          <el-option
+            v-for="item in data.architectOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="特点:">
+        <el-cascader
+          v-model="data.form.features"
+          :options="data.featureOptions"
+          :props="props"
+        >
+        </el-cascader>
+      </el-form-item>
+      <el-form-item label="图片">
+        <upload
+          @getImageUrl="getImageUrl"
+          api="architecture/architecture/upload/"
+          :oldImageUrl="data.form.photo"
+        ></upload>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </template>
 <script setup>
 import axios from "@/utils/axios"; //导入axios
 import router from "@/router"; //导入路由
 import Pagination from "@/components/PaginationFilter.vue";
 import { ref, reactive, watch } from "vue";
-import { Search } from "@element-plus/icons-vue";
+import { Search, Plus } from "@element-plus/icons-vue";
+import upload from "@/components/Upload.vue";
 const api = "architecture";
-const props = { multiple: true, value: `id`, label: `name`, emitPath: false,checkStrictly: false, }; //级联选择器props设定
+const props = {
+  multiple: true,
+  value: `id`,
+  label: `name`,
+  emitPath: false,
+  checkStrictly: false,
+}; //级联选择器props设定
 let listQuery = reactive({
   name: "",
   architect: {},
@@ -156,9 +233,14 @@ let data = reactive({
   architectOptions: {}, //建筑师选择器
   featureOptions: [], //特点选择器
   filter: {},
-  searchVisible: false,
-  width: document.body.clientWidth > 1000 ? "30%" : " 70%",
-  colors:["","success","info","warning","danger"]
+  searchVisible: false, //查询框显示
+  addVisible: false, //添加框显示
+  width: document.body.clientWidth > 1000 ? "40%" : " 70%",
+  colors: ["", "success", "info", "warning", "danger"],
+  form: {
+    name: "",
+    architect: {},
+  }, //添加建筑表单
 });
 getList(1);
 getFeature(); //初始化获得级联菜单
@@ -286,5 +368,24 @@ function del(id) {
     .catch((error) => {
       console.log(error);
     });
+}
+//添加建筑
+function add() {
+  data.form.features=convertFeatureToObject(data.form.features); //将数组转为对象
+  axios({
+    method: "post",
+    url: `/${api}/update`,
+    data: data.form,
+  })
+    .then((res) => {
+      // resetAdd()
+      router.go(0); //回到列表
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+function getImageUrl(url) {
+  data.form.photo = url;
 }
 </script>

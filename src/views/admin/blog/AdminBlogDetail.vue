@@ -28,8 +28,12 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item label="正文" >
-      <Ckeditor @getText="getText" v-model:text="data.form.body"></Ckeditor>
+    <el-form-item label="正文">
+      <ckeditor
+        :editor="ClassicEditor"
+        v-model="data.form.body"
+        :config="custom_config"
+      ></ckeditor>
     </el-form-item>
     <el-form-item label="关键字">
       <el-input v-model="data.form.keywords" />
@@ -44,23 +48,26 @@
   </el-form>
 </template>
 <script setup>
+import { MyUploadAdapter } from "@/api/UploadAdapter.js"; //导入自定义上传适配器
+import ClassicEditor from "@/api/ckeditor.js"; //导入Ckeditor
 import axios from "@/utils/axios"; //导入axios
 import router from "@/router"; //导入路由
-import Ckeditor from "@/components/Ckeditor.vue";
 import Back from "@/components/button/Back.vue";
 import { ref, reactive, getCurrentInstance } from "vue";
 const { proxy } = getCurrentInstance();
-const emit = defineEmits(["getText"]);
 let data = reactive({ form: { category: {}, author: {} }, options: {} });
+let api = "blog";
 
-if(proxy.$route.params.id!=undefined){getBlog();}
+if (proxy.$route.params.id != undefined) {
+  getBlog();
+}
 
 getCategory();
 
 function getBlog() {
   axios({
     method: "get",
-    url: `/blog/${proxy.$route.params.id}`,
+    url: `/${api}/${proxy.$route.params.id}`,
   })
     .then((res) => {
       data.form = res.data.data;
@@ -72,7 +79,7 @@ function getBlog() {
 function getCategory() {
   axios({
     method: "get",
-    url: `/blog/category`,
+    url: `/${api}/category`,
   })
     .then((res) => {
       data.options = res.data.data;
@@ -81,13 +88,10 @@ function getCategory() {
       console.log(error);
     });
 }
-function getText(text) {
-  data.form.body = text;
-}
 function onSubmit() {
   axios({
     method: "post",
-    url: `/blog/update`,
+    url: `/${api}/update`,
     data: data.form,
   })
     .then((res) => {
@@ -97,10 +101,18 @@ function onSubmit() {
       console.log(error);
     });
 }
+const custom_config = {
+  extraPlugins: [MyCustomUploadAdapterPlugin],
+};
 
+function MyCustomUploadAdapterPlugin(editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+    return new MyUploadAdapter(loader, `${api}/${proxy.$route.params.id || 'draft'}/`);
+  };
+}
 </script>
 <style>
-.elform{
+.elform {
   width: 1000px;
 }
 </style>

@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:upload": "node tests/oss-upload.test.cjs",
     "dev": "vue-cli-service serve --mode dev",
     "prod": "vue-cli-service serve --mode prod"
   },

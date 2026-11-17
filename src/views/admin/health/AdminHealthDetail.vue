@@ -1,9 +1,6 @@
 // 后台博客详情
 <template>
   <el-form class="elform" :model="data.form" label-width="100px">
-    <el-form-item label="id">
-      <el-input v-model="data.form.id" />
-    </el-form-item>
     <el-form-item label="日期">
       <el-col :span="11">
         <el-date-picker

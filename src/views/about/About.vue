@@ -75,6 +75,11 @@ const activities = [
     title: "猜建筑1.0",
     content: "后台将建筑资源整合增删改查。通过前台展示js进行答题小游戏",
     timestamp: "2022-5-27",
+  },  
+  {
+    title: "引入Redis",
+    content: "Redis缓存建筑资料库的查询信息。分担服务器压力",
+    timestamp: "2023-2-2",
   },
 ];
 </script>

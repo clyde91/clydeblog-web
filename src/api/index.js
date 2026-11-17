@@ -148,7 +148,7 @@ function gethealth() {
           },
         },
         series: [{
-          type: 'area', //如果是areaspline用曲线连接每个点
+          type: 'areaspline', //如果是areaspline用曲线连接每个点
           name: '体重',
           data: array, //数据来源。这里是一组数据一个列表[日期,体重]
           // data: [],

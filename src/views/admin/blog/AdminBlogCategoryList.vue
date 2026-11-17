@@ -43,7 +43,6 @@ function getList() {
       .catch((error) => {
         console.log(error);
       });
-  
 }
 function goto(id) {
   router.push(`/admin/blog/category/${id}`);

@@ -9,6 +9,7 @@ module.exports = defineConfig({
   // publicPath: process.env.NODE_ENV === "production" ? "/" : "/",    //三元运算。等于production时赋值'/'
   // publicPath: '/',
   publicPath: process.env.NODE_ENV === "production" ? "https://clydeblog.oss-cn-shanghai.aliyuncs.com/static/" : "/",
+  // publicPath: process.env.NODE_ENV === "production" ? "/static/" : "/",
   // publicPath: "https://clydeblog.oss-cn-shanghai.aliyuncs.com/static/",
   // 输出文件目录
   outputDir: 'dist',
@@ -46,10 +47,10 @@ module.exports = defineConfig({
         ],
         js: [
 
-          // 'https://cdn.staticfile.org/vue/3.2.13/vue.runtime.global.min.js',
-          // 'https://cdn.staticfile.org/vue-router/4.0.3/vue-router.global.min.js',
-          'https://cdn.staticfile.org/vue/3.2.13/vue.runtime.global.prod.min.js',
-          'https://cdn.staticfile.org/vue-router/4.0.3/vue-router.global.prod.min.js',
+          'https://cdn.staticfile.org/vue/3.2.13/vue.runtime.global.min.js',
+          'https://cdn.staticfile.org/vue-router/4.0.3/vue-router.global.min.js',
+          // 'https://cdn.staticfile.org/vue/3.2.13/vue.runtime.global.prod.min.js',
+          // 'https://cdn.staticfile.org/vue-router/4.0.3/vue-router.global.prod.min.js',
 
 
           'https://cdn.staticfile.org/axios/0.27.2/axios.min.js',
